@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class='container'>
+    <h1>Home</h1>
+
+    {% if user.is_authenticated %}
+      <p>こんにちは！
+        {% if user.avator %}
+        <img src='{{ user.avator.url }}' style='witdh:5px;height:auto'>{{user.username}}</img>さん</p>
+        {% else %}
+        {{ user.username }}
+        {% endif %}
+        さん</p>
+      <a href="{% url 'logout' %}">ログアウト</a>
+    {% else %}
+      <p>ログインしていません</p>
+      <a href="{% url 'login' %}">ログイン</a>
+      <a href="{% url 'signup' %}">登録</a>
+    {% endif %}
+    {% if messages %}
+      <ul class='list-unstyled'>
+        {% for message in messages %}
+          <li {% if message.tags %} class='{{ message.tags }}' {% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <h2>投稿一覧</h2>
+    {% include 'post/pagination.html' %}  
+</div>
+{% endblock %}

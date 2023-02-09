@@ -1,0 +1,62 @@
+{% block content %}
+{% for item in object_list %}
+      <div class='card mb-3'>
+        <div class='card-body'>
+          <h5 class='card-title'><a href-'{% url 'detail' item.owner.pk %}'>{{ item.owner }}</a></h5>
+          <p class='card-text'>{{ item.content }}</p>
+          {% if item.image %}
+              <img class="img-fluid" src="{{ item.image.url }}"alt=""/>
+          {% endif %}
+          <p class='card-text text-right'>
+            {% if item.visibility == "PRIVATE"%}
+            🔒
+            {% endif %}
+            {{ item.created_at }}
+            </p>
+          <a href="{% url 'post_detail' item.pk %}" class="btn btn-primary">詳細</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <nav>
+    <ul class="pagination">
+      {% if object_list.has_previous %}
+        <li>
+          <a class="page-link text-primary d-inline-block" href="{{ object_list.previous_page_number }}">前</a>
+        </li>
+      {% else %}
+        <li class="disabled">
+          <div class="page-link text-secondary d-inline-block disabled" href="#">前</div>
+        </li>
+      {% endif %}
+      {% for link_page in object_list.paginator.page_range %}
+        {% if link_page %}
+          {% if link_page == object_list.number %}
+            <li class="disabled">
+              <div class="page-link text-secondary d-inline-block diabled" href="#">
+                {{ link_page }}
+              </div>
+            </li>
+          {% else %}
+            <li>
+              <a class="page-link text primary d-inline-block" href="{{ link_page }}">{{ link_page }}</a>
+            </li>
+          {% endif %}
+        {% else %}
+          <li>
+            <a class="page-link text-primary d-inline-block" href="{{ link_page }}">{{ link_page }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      {% if object_list.has_next %}
+        <li>
+          <a class="page-link text-primary d-inline-block" href="{{ object_list.next_page_number }}">次</a>
+        </li>
+      {% else %}
+        <li class="disabled">
+          <div class="page-link text-secondary d-inline-block disabled" href="#">次</div>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endblock %}
